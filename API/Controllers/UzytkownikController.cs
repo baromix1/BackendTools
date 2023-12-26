@@ -18,10 +18,10 @@ namespace API.Controllers
             _uzytkownicy = uzytkownicy;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Uzytkownik>>> GetUzytkownicy()
+        [HttpPost("{idWspolnoty}")]
+        public async Task<ActionResult<IEnumerable<Uzytkownik>>> GetUzytkownicy(string idWspolnoty)
         {
-            return Ok(await _uzytkownicy.GetUzytkownicyAsync());
+            return Ok(await _uzytkownicy.GetUzytkownicyAsync(idWspolnoty));
         }
 
         [HttpGet("{username}")]

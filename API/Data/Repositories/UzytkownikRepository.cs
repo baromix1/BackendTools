@@ -27,12 +27,24 @@ namespace API.Data
 
         }
 
-        public async Task<IReadOnlyList<userDto>> GetUzytkownicyAsync()
+        public async Task<IReadOnlyList<userDto>> GetUzytkownicyAsync(string idWspolnoty)
         {
+
+            var asocjacja = await _context.uzytkownicyWspolnotyAsocjace
+            .Where(p => p.idWspolnoty == Int16.Parse(idWspolnoty))
+            .ToListAsync();
+
+            List<Uzytkownik> users = new List<Uzytkownik>();
+
+            foreach(var a in asocjacja){
+                var temp = await _context.uzytkownicy.SingleOrDefaultAsync(p=>p.Id==a.idUzytkownika);
+                users.Add(temp);
+            }
             List<userDto> lista=new List<userDto>();
-            var users= await _context.uzytkownicy.ToListAsync();
+            
             foreach(var u in users){
-                userDto temp = new userDto{
+                userDto temp = new()
+                {
                     idUzytkownika=u.Id,
                     username=u.username
                 };
