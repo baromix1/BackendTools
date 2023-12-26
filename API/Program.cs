@@ -10,16 +10,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DataContext>(opt=>{
-     var connectionString = "server=toolsserverforpolsl.mysql.database.azure.com;user=root1;password=admin123$;database=toolsdb";
+builder.Services.AddDbContext<DataContext>(opt =>
+{
+    var connectionString = "server=toolsserverforpolsl.mysql.database.azure.com;user=root1;password=admin123$;database=toolsdb";
 
-            var serverVersion = new MySqlServerVersion(new Version(8, 0));
-            opt.UseMySql(connectionString, serverVersion);
+    var serverVersion = new MySqlServerVersion(new Version(8, 0));
+    opt.UseMySql(connectionString, serverVersion);
 });
 builder.Services.AddScoped<WspolnotaRepository>();
 builder.Services.AddScoped<UzytkownikRepository>();
 var app = builder.Build();
-
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:3000"));
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
