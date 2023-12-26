@@ -18,7 +18,7 @@ namespace API.Controllers
             _uzytkownicy = uzytkownicy;
         }
 
-        [HttpPost("{idWspolnoty}")]
+        [HttpPost("users")]
         public async Task<ActionResult<IEnumerable<Uzytkownik>>> GetUzytkownicy(string idWspolnoty)
         {
             return Ok(await _uzytkownicy.GetUzytkownicyAsync(idWspolnoty));
