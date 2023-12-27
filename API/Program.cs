@@ -1,4 +1,6 @@
 using API.Data;
+using API.Data.Repositories;
+using API.Entities;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,7 @@ builder.Services.AddDbContext<DataContext>(opt =>
 });
 builder.Services.AddScoped<WspolnotaRepository>();
 builder.Services.AddScoped<UzytkownikRepository>();
+builder.Services.AddScoped<OfertaRepository>();
 var app = builder.Build();
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:3000"));
 // Configure the HTTP request pipeline.
