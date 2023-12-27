@@ -24,7 +24,7 @@ namespace API.Controllers
             return Ok(await _oferty.GetOfertyAsync(idWspolnoty));
         }
         [HttpGet("{idOferty}")]
-        public async Task<ActionResult<IEnumerable<Oferta>>> GetOferta(int idOferty)
+        public async Task<ActionResult<OfertaDto>> GetOferta(int idOferty)
         {
             return Ok(await _oferty.GetOfertaByIdAsync(idOferty));
         }
