@@ -28,10 +28,10 @@ namespace API.Controllers
             return Ok(await _uzytkownicy.GetUzytkownicyAsync(idWspolontyDto.idWspolnoty));
         }
 
-        [HttpGet("{username}")]
-        public async Task<ActionResult<Uzytkownik>> GetUzytkownik(string username)
+        [HttpGet("{idUzytkownika}")]
+        public async Task<ActionResult<Uzytkownik>> GetUzytkownik(int idUzytkownika)
         {
-            var uzytkownik = await _uzytkownicy.GetUzytkownikByUsernameAsync(username);
+            var uzytkownik = await _uzytkownicy.GetUzytkownikByIddAsync(idUzytkownika);
 
             if (uzytkownik == null)
             {
