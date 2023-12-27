@@ -93,11 +93,11 @@ namespace API.Data
             return await _context.uzytkownicy.AnyAsync(x => x.username.ToLower() == username.ToLower());
         }
 
-        public async Task<bool> AddUserToDb(Uzytkownik uzytkownik)
+        public async Task<int> AddUserToDb(Uzytkownik uzytkownik)
         {
             _context.uzytkownicy.Add(uzytkownik);
-            await _context.SaveChangesAsync();
-            return true;
+            
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<bool> AddUserToWspolnotaDb(int _idUzytkownika, int _idWspolnoty)
