@@ -27,6 +27,19 @@ namespace API.Data
             };
 
         }
+                public async Task<userDto> GetUzytkownikByIddAsync(int idUzytkownika)
+        {
+
+#pragma warning disable CS8603 // Possible null reference return.
+            var user = _context.uzytkownicy.Find(idUzytkownika);
+#pragma warning restore CS8603 // Possible null reference return.
+            return new userDto
+            {
+                idUzytkownika = user.Id,
+                username = user.username
+            };
+
+        }
 
         public async Task<IReadOnlyList<userDto>> GetUzytkownicyAsync(string idWspolnoty)
         {

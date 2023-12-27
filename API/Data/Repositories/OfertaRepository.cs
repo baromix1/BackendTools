@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.DTOs;
 using API.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,8 +24,35 @@ namespace API.Data.Repositories
 
         }
 
-        public async Task<IReadOnlyList<Oferta>> GetOfertyAsync(int idWspolnoty){
-            return await _context.oferty.Where(p=>p.IdOsiedla==idWspolnoty).ToListAsync();
+        public async Task<IReadOnlyList<OfertaDto>> GetOfertyAsync(int idWspolnoty){
+            var oferty= await _context.oferty.Where(p=>p.IdOsiedla==idWspolnoty).ToListAsync();
+            
+            List<OfertaDto> lista=new List<OfertaDto>();
+
+            foreach(var o in oferty){
+                string name= _context.uzytkownicy.Find(o.IdUzytkownika).username;
+                OfertaDto temp = new OfertaDto{
+                    Id=o.Id,
+                    IdOsiedla=o.IdOsiedla,
+                    IdUzytkownika=o.IdOsiedla,
+                    Typ=o.Typ,
+                    Cena=o.Cena,
+                    Zdjecie=o.Zdjecie,
+                    DataDodaniaOferty=o.DataDodaniaOferty,
+                    DataDoKiedy=o.DataDoKiedy,
+                    DataOdKiedy=o.DataOdKiedy,
+                    Tytul=o.Tytul,
+                    Opis=o.Opis,
+                    CzyZakonczona=o.CzyZakonczona,
+                    Username=name
+                };
+                lista.Add(temp);
+                
+            }
+            return lista;
+        }
+        public async Task<IReadOnlyList<Oferta>> GetOfertyByWspolnotaAndUzytkownikAsync(int idWspolnoty,int idUzytkownika){
+            return await _context.oferty.Where(p=>p.IdOsiedla==idWspolnoty &&p.IdUzytkownika==idUzytkownika).ToListAsync();
         }
     }
 }

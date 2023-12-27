@@ -28,6 +28,11 @@ namespace API.Controllers
         {
             return Ok(await _oferty.GetOfertaByIdAsync(idOferty));
         }
+        [HttpPost("all/user")]
+        public async Task<ActionResult<IEnumerable<Oferta>>> GetOfertyByUserAndWspolnota(WspolnotaUzytkownikDto wspolnotaUzytkownikDto)
+        {
+            return Ok(await _oferty.GetOfertyByWspolnotaAndUzytkownikAsync(wspolnotaUzytkownikDto.idWspolnoty,wspolnotaUzytkownikDto.idUzytkownika));
+        }
 
   
     }
