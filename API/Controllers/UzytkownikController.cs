@@ -15,10 +15,13 @@ namespace API.Controllers
         private readonly UzytkownikRepository _uzytkownicy;
         private readonly UzytkownikWspolnotaAsocjacjaRepository _uzytkownikWspolnotaAsocjacja;
 
-        public UzytkownikController(UzytkownikRepository uzytkownicy, UzytkownikWspolnotaAsocjacjaRepository uzytkownikWspolnotaAsocjacja)
+        private readonly DataContext _context;
+
+        public UzytkownikController(UzytkownikRepository uzytkownicy, UzytkownikWspolnotaAsocjacjaRepository uzytkownikWspolnotaAsocjacja, DataContext context)
         {
             _uzytkownicy = uzytkownicy;
             _uzytkownikWspolnotaAsocjacja = uzytkownikWspolnotaAsocjacja;
+            _context = context;
         }
 
         [HttpPost("users")]
@@ -60,11 +63,20 @@ namespace API.Controllers
                 typ = registerDto.typ
             };
 
-            await _uzytkownicy.AddUserToDb(user);
+            _context.uzytkownicy.Add(user);
+            await _context.SaveChangesAsync();
 
-            var idUz = _uzytkownicy.GetUzytkownikByUsernameAsync(registerDto.username).Id;
+            var idUz = await _uzytkownicy.GetUserIdByUsernameAsync(registerDto.username);
 
-            await _uzytkownicy.AddUserToWspolnotaDb(idUz, registerDto.idWspolnoty);
+            var temp = new UzytkownikWspolnotaAsocjacja
+            {
+                idUzytkownika = idUz,
+                idWspolnoty = registerDto.idWspolnoty
+            };
+
+            _context.uzytkownicyWspolnotyAsocjace.Add(temp);
+            await _context.SaveChangesAsync();
+
             return true;
         }
     }
