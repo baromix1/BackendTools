@@ -18,11 +18,12 @@ namespace API.Data
         {
 
 #pragma warning disable CS8603 // Possible null reference return.
-            var user= await _context.uzytkownicy.SingleOrDefaultAsync(p => p.username == username);
+            var user = await _context.uzytkownicy.SingleOrDefaultAsync(p => p.username == username);
 #pragma warning restore CS8603 // Possible null reference return.
-            return new userDto{
-                idUzytkownika=user.Id,
-                username=user.username
+            return new userDto
+            {
+                idUzytkownika = user.Id,
+                username = user.username
             };
 
         }
@@ -36,17 +37,19 @@ namespace API.Data
 
             List<Uzytkownik> users = new List<Uzytkownik>();
 
-            foreach(var a in asocjacja){
-                var temp = await _context.uzytkownicy.SingleOrDefaultAsync(p=>p.Id==a.idUzytkownika);
+            foreach (var a in asocjacja)
+            {
+                var temp = await _context.uzytkownicy.SingleOrDefaultAsync(p => p.Id == a.idUzytkownika);
                 users.Add(temp);
             }
-            List<userDto> lista=new List<userDto>();
-            
-            foreach(var u in users){
+            List<userDto> lista = new List<userDto>();
+
+            foreach (var u in users)
+            {
                 userDto temp = new()
                 {
-                    idUzytkownika=u.Id,
-                    username=u.username
+                    idUzytkownika = u.Id,
+                    username = u.username
                 };
                 lista.Add(temp);
             }
@@ -84,6 +87,30 @@ namespace API.Data
                 listaWspolnot = lista
             };
 
+        }
+        public async Task<bool> UserExists(string username)
+        {
+            return await _context.uzytkownicy.AnyAsync(x => x.username.ToLower() == username.ToLower());
+        }
+
+        public async Task<bool> AddUserToDb(Uzytkownik uzytkownik)
+        {
+            _context.uzytkownicy.Add(uzytkownik);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> AddUserToWspolnotaDb(int _idUzytkownika, int _idWspolnoty)
+        {
+            UzytkownikWspolnotaAsocjacja temp = new UzytkownikWspolnotaAsocjacja
+            {
+                idUzytkownika = _idUzytkownika,
+                idWspolnoty = _idWspolnoty
+            };
+
+            _context.uzytkownicyWspolnotyAsocjace.Add(temp);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
