@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using API.Data.Repositories;
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
+using Core.Specification;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -18,10 +20,14 @@ namespace API.Controllers
             _oferty = oferty;
         }
 
-        [HttpGet("all/{idWspolnoty}")]
-        public async Task<ActionResult<IEnumerable<Oferta>>> GetOferty(int idWspolnoty)
+        [HttpPost("all/{idWspolnoty}")]
+        public async Task<ActionResult<Pagination<OfertaDto>>> GetOferty(int idWspolnoty,OfertySpecParams ofertyParams)
         {
-            return Ok(await _oferty.GetOfertyAsync(idWspolnoty));
+            var spec= new ProductsWithTypersAndBrandSpecification(ofertyParams);
+            var countSpec=new ProductWithFiltersForCountSpecification(ofertyParams);
+            var totalItems=await _oferty.CountAsync(countSpec);
+            var oferty=await _oferty.GetOfertyAsync(idWspolnoty,spec);
+            return Ok(new Pagination<OfertaDto>(ofertyParams.PageIndex,ofertyParams.PageSize,totalItems,oferty));
         }
         [HttpGet("{idOferty}")]
         public async Task<ActionResult<OfertaDto>> GetOferta(int idOferty)

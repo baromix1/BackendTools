@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
+using Core.Specification;
+using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data.Repositories
@@ -44,9 +46,9 @@ namespace API.Data.Repositories
 
         }
 
-        public async Task<IReadOnlyList<OfertaDto>> GetOfertyAsync(int idWspolnoty)
+        public async Task<IReadOnlyList<OfertaDto>> GetOfertyAsync(int idWspolnoty, ISpecification<Oferta> spec)
         {
-            var oferty = await _context.oferty.Where(p => p.IdOsiedla == idWspolnoty).ToListAsync();
+            var oferty = await ApplySpecification(spec).Where(p => p.IdOsiedla == idWspolnoty).ToListAsync();
 
             List<OfertaDto> lista = new List<OfertaDto>();
 
@@ -77,6 +79,17 @@ namespace API.Data.Repositories
         public async Task<IReadOnlyList<Oferta>> GetOfertyByWspolnotaAndUzytkownikAsync(int idWspolnoty, int idUzytkownika)
         {
             return await _context.oferty.Where(p => p.IdOsiedla == idWspolnoty && p.IdUzytkownika == idUzytkownika).ToListAsync();
+        }
+      
+      
+        
+        private IQueryable<Oferta> ApplySpecification(ISpecification<Oferta> spec){
+            return SpecificationEvalator<Oferta>.GetQuery(_context.oferty.AsQueryable(),spec);
+        }
+
+        public async Task<int> CountAsync(ISpecification<Oferta> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
         }
     }
 }
