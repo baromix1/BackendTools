@@ -113,7 +113,7 @@ namespace API.Data
 
         public async Task<bool> AddUserToWspolnotaDbAsyn(int _idUzytkownika, int _idWspolnoty)
         {
-            if (await _context.uzytkownicy.AnyAsync(x => x.Id == _idUzytkownika)) return false;
+            if (!await _context.uzytkownicy.AnyAsync(x => x.Id == _idUzytkownika)) return false;
 
             UzytkownikWspolnotaAsocjacja temp = new UzytkownikWspolnotaAsocjacja
             {
