@@ -93,6 +93,7 @@ namespace API.Data
             }
             return new LoggedUserDto
             {
+                id = uzytkownik.Id,
                 username = uzytkownik.username,
                 typ = uzytkownik.typ,
                 listaWspolnot = lista
