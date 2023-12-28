@@ -4,7 +4,7 @@ namespace API.Entities
     {
         public required string Typ { get; set; }
         public required int IdUzytkownika { get; set; }
-        public string? Zdjecie { get; set; }
+        public byte[]? Zdjecie { get; set; }
         public required string Tytul { get; set; }
         public string? Opis { get; set; }
         public required int IdOsiedla { get; set; }
