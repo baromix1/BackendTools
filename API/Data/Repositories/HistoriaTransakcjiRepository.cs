@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data.Repositories
 {
-    public class HistoriaTransakcjiRepository : BaseApiController
+    public class HistoriaTransakcjiRepository
     {
         private readonly DataContext _context;
 
