@@ -1,10 +1,11 @@
+using API.Controllers;
 using API.DTOs;
 using API.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data.Repositories
 {
-    public class HistoriaTransakcjiRepository
+    public class HistoriaTransakcjiRepository : BaseApiController
     {
         private readonly DataContext _context;
 
