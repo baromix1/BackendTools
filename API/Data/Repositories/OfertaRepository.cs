@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
 using Core.Specification;
@@ -51,7 +47,7 @@ namespace API.Data.Repositories
 
         public async Task<IReadOnlyList<OfertaDto>> GetOfertyAsync(int idWspolnoty, ISpecification<Oferta> spec)
         {
-            var oferty = await ApplySpecification(spec).Where(p => p.IdOsiedla == idWspolnoty&&p.CzyZakonczona==false).ToListAsync();
+            var oferty = await ApplySpecification(spec).Where(p => p.IdOsiedla == idWspolnoty && p.CzyZakonczona == false).ToListAsync();
 
             List<OfertaDto> lista = new List<OfertaDto>();
 
@@ -100,14 +96,16 @@ namespace API.Data.Repositories
         }
         public IReadOnlyList<KomentarzDoWyswietleniaDto> GetKomentarzeOfertyAsync(int idOferty)
         {
-            var komentarzeOferty= _context.komentarzeOferty.Where(p => p.IdOferty == idOferty).ToList();
-            List<KomentarzDoWyswietleniaDto> listaKomentarzy=new List<KomentarzDoWyswietleniaDto>();
-            foreach(var k in komentarzeOferty){
+            var komentarzeOferty = _context.komentarzeOferty.Where(p => p.IdOferty == idOferty).ToList();
+            List<KomentarzDoWyswietleniaDto> listaKomentarzy = new List<KomentarzDoWyswietleniaDto>();
+            foreach (var k in komentarzeOferty)
+            {
                 var user = _context.uzytkownicy.Find(k.IdUzytkownika);
-                KomentarzDoWyswietleniaDto temp = new KomentarzDoWyswietleniaDto{
-                    username=user.username,
-                    Data=k.Data,
-                    Tresc=k.Tresc
+                KomentarzDoWyswietleniaDto temp = new KomentarzDoWyswietleniaDto
+                {
+                    username = user.username,
+                    Data = k.Data,
+                    Tresc = k.Tresc
                 };
                 listaKomentarzy.Add(temp);
 
@@ -129,23 +127,29 @@ namespace API.Data.Repositories
         }
         public async Task<int> AddOferta(AddOfertaDto oferta)
         {
-            Oferta nowaOferta = new Oferta
+            using (var memoryStream = new MemoryStream())
             {
-                
-                IdOsiedla = oferta.IdOsiedla,
-                IdUzytkownika = oferta.IdOsiedla,
-                Typ = oferta.Typ,
-                Cena = oferta.Cena,
-                Zdjecie = oferta.Zdjecie,
-                DataDodaniaOferty = oferta.DataDodaniaOferty,
-                DataDoKiedy = oferta.DataDoKiedy,
-                DataOdKiedy = oferta.DataOdKiedy,
-                Tytul = oferta.Tytul,
-                Opis = oferta.Opis,
-                CzyZakonczona = oferta.CzyZakonczona,
-            };
-            await _context.oferty.AddAsync(nowaOferta);
-            return await _context.SaveChangesAsync();
+                oferta.imageFile.CopyTo(memoryStream);
+                byte[] imageBytes = memoryStream.ToArray();
+
+                Oferta nowaOferta = new Oferta
+                {
+                    IdOsiedla = oferta.IdOsiedla,
+                    IdUzytkownika = oferta.IdOsiedla,
+                    Typ = oferta.Typ,
+                    Cena = oferta.Cena,
+                    Zdjecie = imageBytes,
+                    DataDodaniaOferty = oferta.DataDodaniaOferty,
+                    DataDoKiedy = oferta.DataDoKiedy,
+                    DataOdKiedy = oferta.DataOdKiedy,
+                    Tytul = oferta.Tytul,
+                    Opis = oferta.Opis,
+                    CzyZakonczona = oferta.CzyZakonczona,
+                };
+
+                await _context.oferty.AddAsync(nowaOferta);
+                return await _context.SaveChangesAsync();
+            }
         }
     }
 }
