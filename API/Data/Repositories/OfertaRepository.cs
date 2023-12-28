@@ -26,8 +26,8 @@ namespace API.Data.Repositories
             var o = await _context.oferty.SingleOrDefaultAsync(p => p.Id == id);
             string name = _context.uzytkownicy.Find(o.IdUzytkownika).username;
 #pragma warning restore CS8603 // Possible null reference return.
-            List<KomentarzOferty> listaKomentarzy = new List<KomentarzOferty>();
-            listaKomentarzy = (List<KomentarzOferty>)GetKomentarzeOfertyAsync(o.Id);
+            List<KomentarzDoWyswietleniaDto> listaKomentarzy = new List<KomentarzDoWyswietleniaDto>();
+            listaKomentarzy = (List<KomentarzDoWyswietleniaDto>)GetKomentarzeOfertyAsync(o.Id);
             OfertaDto temp = new OfertaDto
             {
                 Id = o.Id,
@@ -57,8 +57,8 @@ namespace API.Data.Repositories
 
             foreach (var o in oferty)
             {
-                List<KomentarzOferty> listaKomentarzy = new List<KomentarzOferty>();
-                listaKomentarzy = (List<KomentarzOferty>)GetKomentarzeOfertyAsync(o.Id);
+                List<KomentarzDoWyswietleniaDto> listaKomentarzy = new List<KomentarzDoWyswietleniaDto>();
+                listaKomentarzy = (List<KomentarzDoWyswietleniaDto>)GetKomentarzeOfertyAsync(o.Id);
                 string name = _context.uzytkownicy.Find(o.IdUzytkownika).username;
                 OfertaDto temp = new OfertaDto
                 {
@@ -98,9 +98,21 @@ namespace API.Data.Repositories
         {
             return await ApplySpecification(spec).CountAsync();
         }
-        public IReadOnlyList<KomentarzOferty> GetKomentarzeOfertyAsync(int idOferty)
+        public IReadOnlyList<KomentarzDoWyswietleniaDto> GetKomentarzeOfertyAsync(int idOferty)
         {
-            return _context.komentarzeOferty.Where(p => p.IdOferty == idOferty).ToList();
+            var komentarzeOferty= _context.komentarzeOferty.Where(p => p.IdOferty == idOferty).ToList();
+            List<KomentarzDoWyswietleniaDto> listaKomentarzy=new List<KomentarzDoWyswietleniaDto>();
+            foreach(var k in komentarzeOferty){
+                var user = _context.uzytkownicy.Find(k.IdUzytkownika);
+                KomentarzDoWyswietleniaDto temp = new KomentarzDoWyswietleniaDto{
+                    username=user.username,
+                    Data=k.Data,
+                    Tresc=k.Tresc
+                };
+                listaKomentarzy.Add(temp);
+
+            }
+            return listaKomentarzy;
         }
         public async Task<int> AddKomentarzToOferta(KomentarzOfertyDto komentarzOfertyDto)
         {

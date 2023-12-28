@@ -22,6 +22,6 @@ namespace API.DTOs
         public float? Cena { get; set; }
         public required bool CzyZakonczona { get; set; }
         public required string Username {get; set;}
-        public List<KomentarzOferty>? listaKomentarzy {get; set;}
+        public List<KomentarzDoWyswietleniaDto>? listaKomentarzy {get; set;}
     }
 }

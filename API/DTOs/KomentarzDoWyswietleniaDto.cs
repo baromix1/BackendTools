@@ -1,0 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace API.DTOs
+{
+    public class KomentarzDoWyswietleniaDto
+    {
+          public required DateTime Data { get; set; }
+         public required string Tresc {get; set;}
+         public required string username {get; set;}
+    }
+}
