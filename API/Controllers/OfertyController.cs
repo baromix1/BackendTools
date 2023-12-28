@@ -25,11 +25,13 @@ namespace API.Controllers
             var oferty = await _oferty.GetOfertyAsync(idWspolnoty, spec);
             return Ok(new Pagination<OfertaDto>(ofertyParams.PageIndex, ofertyParams.PageSize, totalItems, oferty));
         }
+        
         [HttpGet("{idOferty}")]
         public async Task<ActionResult<OfertaDto>> GetOferta(int idOferty)
         {
             return Ok(await _oferty.GetOfertaByIdAsync(idOferty));
         }
+
         [HttpPost("all/user")]
         public async Task<ActionResult<IEnumerable<Oferta>>> GetOfertyByUserAndWspolnota(WspolnotaUzytkownikDto wspolnotaUzytkownikDto)
         {
@@ -39,28 +41,30 @@ namespace API.Controllers
         [HttpPost("add/komentarz")]
         public async Task<ActionResult<IEnumerable<Oferta>>> AddKomentarzToOferta(KomentarzOfertyDto komentarzOfertyDto)
         {
-            var i=await _oferty.AddKomentarzToOferta(komentarzOfertyDto);
-            if(i>0){
+            var i = await _oferty.AddKomentarzToOferta(komentarzOfertyDto);
+            if (i > 0)
+            {
                 return Ok();
             }
-            else{
+            else
+            {
                 return BadRequest();
             }
 
         }
+
         [HttpPost("add/oferta")]
-        public async Task<ActionResult<IEnumerable<Oferta>>> AddOferta(AddOfertaDto oferta)
+        public async Task<ActionResult<IEnumerable<Oferta>>> AddOferta([FromForm] AddOfertaDto oferta)
         {
-            var i=await _oferty.AddOferta(oferta);
-            if(i>0){
+            var i = await _oferty.AddOferta(oferta);
+            if (i > 0)
+            {
                 return Ok();
             }
-            else{
+            else
+            {
                 return BadRequest();
             }
-
         }
-            
-        }
-        
     }
+}

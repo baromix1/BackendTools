@@ -7,9 +7,9 @@ namespace API.DTOs
 {
     public class AddOfertaDto
     {
-               public required string Typ { get; set; }
+        public required string Typ { get; set; }
         public required int IdUzytkownika { get; set; }
-        public string? Zdjecie { get; set; }
+        public IFormFile? imageFile { get; set; }
         public required string Tytul { get; set; }
         public string? Opis { get; set; }
         public required int IdOsiedla { get; set; }
