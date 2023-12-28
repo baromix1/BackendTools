@@ -14,10 +14,10 @@ namespace API.Controllers
             _historiaTransakcji = historiaTransakcji;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IReadOnlyList<Oferta>> GetHistoria(int id)
+        [HttpGet("{idUzytkownika}")]
+        public async Task<IReadOnlyList<OfertaDto>> GetHistoria(int idUzytkownika)
         {
-            return await _historiaTransakcji.GetZakonczoneOfertyAsync(id);
+            return await _historiaTransakcji.GetZakonczoneOfertyAsync(idUzytkownika);
         }
 
         [HttpPut("dodaj-do-historii")]

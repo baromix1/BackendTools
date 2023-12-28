@@ -8,17 +8,23 @@ namespace API.Data.Repositories
     public class HistoriaTransakcjiRepository
     {
         private readonly DataContext _context;
+        private readonly OfertaRepository _oferta;
 
-        public HistoriaTransakcjiRepository(DataContext context)
+        public HistoriaTransakcjiRepository(DataContext context, OfertaRepository oferta)
         {
+            _oferta = oferta;
             _context = context;
         }
 
-        public async Task<IReadOnlyList<Oferta>> GetZakonczoneOfertyAsync(int idUzytkownika)
+        public async Task<IReadOnlyList<OfertaDto>> GetZakonczoneOfertyAsync(int _idUzytkownika)
         {
-            var historia = await _context.historieTransakcji.FirstOrDefaultAsync(x => x.Id == idUzytkownika);
-
-            return await _context.oferty.Where(x => x.Id == historia.idOferty && x.CzyZakonczona == true).ToListAsync();
+            var historia = await _context.historieTransakcji.Where(x => x.idUzytkownika == _idUzytkownika).ToListAsync();
+            var listaOfertaDto = new List<OfertaDto>();
+            foreach (var i in historia)
+            {
+                listaOfertaDto.Add(await _oferta.GetOfertaByIdAsync(i.idOferty));
+            }
+            return listaOfertaDto;
         }
 
         public async Task<bool> AddToHistoryAsync(int _idUzytkownika, int _idOferty)
