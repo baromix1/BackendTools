@@ -7,8 +7,9 @@ namespace API.DTOs
 {
     public class KomentarzDoWyswietleniaDto
     {
-          public required DateTime Data { get; set; }
-         public required string Tresc {get; set;}
-         public required string username {get; set;}
+        public required DateTime Data { get; set; }
+        public required string Tresc { get; set; }
+        public required string username { get; set; }
+        public required int idKomentarza { get; set; }
     }
 }
