@@ -1,12 +1,11 @@
 using API.Data.Repositories;
 using API.DTOs;
 using API.Entities;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class HistoriaTransakcjiController
+    public class HistoriaTransakcjiController : BaseApiController
     {
         private readonly HistoriaTransakcjiRepository _historiaTransakcji;
 
