@@ -13,15 +13,14 @@ namespace API.Controllers
     public class UzytkownikController : BaseApiController
     {
         private readonly UzytkownikRepository _uzytkownicy;
-        private readonly UzytkownikWspolnotaAsocjacjaRepository _uzytkownikWspolnotaAsocjacja;
-
         private readonly DataContext _context;
 
-        public UzytkownikController(UzytkownikRepository uzytkownicy, UzytkownikWspolnotaAsocjacjaRepository uzytkownikWspolnotaAsocjacja, DataContext context)
+
+        public UzytkownikController(UzytkownikRepository uzytkownicy, DataContext context)
         {
             _uzytkownicy = uzytkownicy;
-            _uzytkownikWspolnotaAsocjacja = uzytkownikWspolnotaAsocjacja;
             _context = context;
+
         }
 
         [HttpPost("users")]
@@ -30,10 +29,10 @@ namespace API.Controllers
             return Ok(await _uzytkownicy.GetUzytkownicyAsync(idWspolontyDto.idWspolnoty));
         }
 
-        [HttpGet("{username}")]
-        public async Task<ActionResult<Uzytkownik>> GetUzytkownik(string username)
+        [HttpGet("{idUzytkownika}")]
+        public async Task<ActionResult<Uzytkownik>> GetUzytkownik(int idUzytkownika)
         {
-            var uzytkownik = await _uzytkownicy.GetUzytkownikByUsernameAsync(username);
+            var uzytkownik = await _uzytkownicy.GetUzytkownikByIddAsync(idUzytkownika);
 
             if (uzytkownik == null)
             {
@@ -64,11 +63,14 @@ namespace API.Controllers
             };
 
             _context.uzytkownicy.Add(user);
+
+
             await _context.SaveChangesAsync();
 
-            var idUz = await _uzytkownicy.GetUserIdByUsernameAsync(registerDto.username);
+            var uz = await _uzytkownicy.GetUzytkownikByUsernameAsync(registerDto.username);
+            int idUz = uz.idUzytkownika;
 
-            var temp = new UzytkownikWspolnotaAsocjacja
+            UzytkownikWspolnotaAsocjacja temp = new UzytkownikWspolnotaAsocjacja
             {
                 idUzytkownika = idUz,
                 idWspolnoty = registerDto.idWspolnoty

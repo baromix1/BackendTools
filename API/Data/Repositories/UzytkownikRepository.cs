@@ -25,6 +25,19 @@ namespace API.Data
                 username = user.username
             };
         }
+                public async Task<userDto> GetUzytkownikByIddAsync(int idUzytkownika)
+        {
+
+#pragma warning disable CS8603 // Possible null reference return.
+            var user = _context.uzytkownicy.Find(idUzytkownika);
+#pragma warning restore CS8603 // Possible null reference return.
+            return new userDto
+            {
+                idUzytkownika = user.Id,
+                username = user.username
+            };
+
+        }
 
         public async Task<IReadOnlyList<userDto>> GetUzytkownicyAsync(string idWspolnoty)
         {
@@ -91,11 +104,11 @@ namespace API.Data
             return await _context.uzytkownicy.AnyAsync(x => x.username.ToLower() == username.ToLower());
         }
 
-        public async Task<bool> AddUserToDb(Uzytkownik uzytkownik)
+        public async Task<int> AddUserToDb(Uzytkownik uzytkownik)
         {
             _context.uzytkownicy.Add(uzytkownik);
-            await _context.SaveChangesAsync();
-            return true;
+            
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<bool> AddUserToWspolnotaDb(int _idUzytkownika, int _idWspolnoty)
