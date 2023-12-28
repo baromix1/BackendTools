@@ -21,13 +21,13 @@ namespace API.Controllers
         }
 
         [HttpPost("all/{idWspolnoty}")]
-        public async Task<ActionResult<Pagination<OfertaDto>>> GetOferty(int idWspolnoty,OfertySpecParams ofertyParams)
+        public async Task<ActionResult<Pagination<OfertaDto>>> GetOferty(int idWspolnoty, OfertySpecParams ofertyParams)
         {
-            var spec= new ProductsWithTypersAndBrandSpecification(ofertyParams);
-            var countSpec=new ProductWithFiltersForCountSpecification(ofertyParams);
-            var totalItems=await _oferty.CountAsync(countSpec);
-            var oferty=await _oferty.GetOfertyAsync(idWspolnoty,spec);
-            return Ok(new Pagination<OfertaDto>(ofertyParams.PageIndex,ofertyParams.PageSize,totalItems,oferty));
+            var spec = new ProductsWithTypersAndBrandSpecification(ofertyParams);
+            var countSpec = new ProductWithFiltersForCountSpecification(ofertyParams);
+            var totalItems = await _oferty.CountAsync(countSpec);
+            var oferty = await _oferty.GetOfertyAsync(idWspolnoty, spec);
+            return Ok(new Pagination<OfertaDto>(ofertyParams.PageIndex, ofertyParams.PageSize, totalItems, oferty));
         }
         [HttpGet("{idOferty}")]
         public async Task<ActionResult<OfertaDto>> GetOferta(int idOferty)
@@ -37,7 +37,7 @@ namespace API.Controllers
         [HttpPost("all/user")]
         public async Task<ActionResult<IEnumerable<Oferta>>> GetOfertyByUserAndWspolnota(WspolnotaUzytkownikDto wspolnotaUzytkownikDto)
         {
-            return Ok(await _oferty.GetOfertyByWspolnotaAndUzytkownikAsync(wspolnotaUzytkownikDto.idWspolnoty,wspolnotaUzytkownikDto.idUzytkownika));
+            return Ok(await _oferty.GetOfertyByWspolnotaAndUzytkownikAsync(wspolnotaUzytkownikDto.idWspolnoty, wspolnotaUzytkownikDto.idUzytkownika));
         }
         [HttpPost("add/komentarz")]
         public async Task<ActionResult<IEnumerable<Oferta>>> AddKomentarzToOferta(KomentarzOfertyDto komentarzOfertyDto)
@@ -67,5 +67,5 @@ namespace API.Controllers
         }
         
 
-  
+
     }

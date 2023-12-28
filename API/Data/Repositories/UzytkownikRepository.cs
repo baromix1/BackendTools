@@ -25,7 +25,7 @@ namespace API.Data
                 username = user.username
             };
         }
-                public async Task<userDto> GetUzytkownikByIddAsync(int idUzytkownika)
+        public async Task<userDto> GetUzytkownikByIddAsync(int idUzytkownika)
         {
 
 
@@ -107,19 +107,21 @@ namespace API.Data
         public async Task<int> AddUserToDb(Uzytkownik uzytkownik)
         {
             _context.uzytkownicy.Add(uzytkownik);
-            
+
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> AddUserToWspolnotaDb(int _idUzytkownika, int _idWspolnoty)
+        public async Task<bool> AddUserToWspolnotaDbAsyn(int _idUzytkownika, int _idWspolnoty)
         {
+            if (!await _context.uzytkownicy.AnyAsync(x => x.Id == _idUzytkownika)) return false;
+
             UzytkownikWspolnotaAsocjacja temp = new UzytkownikWspolnotaAsocjacja
             {
                 idUzytkownika = _idUzytkownika,
                 idWspolnoty = _idWspolnoty
             };
 
-            _context.uzytkownicyWspolnotyAsocjace.Add(temp);
+            await _context.uzytkownicyWspolnotyAsocjace.AddAsync(temp);
             await _context.SaveChangesAsync();
             return true;
         }
