@@ -104,6 +104,7 @@ namespace API.Data.Repositories
                 var user = _context.uzytkownicy.Find(k.IdUzytkownika);
                 KomentarzDoWyswietleniaDto temp = new KomentarzDoWyswietleniaDto
                 {
+                    idKomentarza = k.Id,
                     username = user.username,
                     Data = k.Data,
                     Tresc = k.Tresc
