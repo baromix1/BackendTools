@@ -39,7 +39,33 @@ namespace API.Controllers
         {
             return Ok(await _oferty.GetOfertyByWspolnotaAndUzytkownikAsync(wspolnotaUzytkownikDto.idWspolnoty,wspolnotaUzytkownikDto.idUzytkownika));
         }
+        [HttpPost("add/komentarz")]
+        public async Task<ActionResult<IEnumerable<Oferta>>> AddKomentarzToOferta(KomentarzOfertyDto komentarzOfertyDto)
+        {
+            var i=await _oferty.AddKomentarzToOferta(komentarzOfertyDto);
+            if(i>0){
+                return Ok();
+            }
+            else{
+                return BadRequest();
+            }
+
+        }
+        [HttpPost("add/oferta")]
+        public async Task<ActionResult<IEnumerable<Oferta>>> AddOferta(AddOfertaDto oferta)
+        {
+            var i=await _oferty.AddOferta(oferta);
+            if(i>0){
+                return Ok();
+            }
+            else{
+                return BadRequest();
+            }
+
+        }
+            
+        }
+        
 
   
     }
-}

@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using API.Entities;
 
 namespace API.DTOs
 {
-    public class OfertaDto
+    public class AddOfertaDto
     {
-        public int Id { get; set; }
-        public required string Typ { get; set; }
+               public required string Typ { get; set; }
         public required int IdUzytkownika { get; set; }
         public string? Zdjecie { get; set; }
         public required string Tytul { get; set; }
@@ -21,7 +18,5 @@ namespace API.DTOs
         public DateTime? DataDoKiedy { get; set; }
         public float? Cena { get; set; }
         public required bool CzyZakonczona { get; set; }
-        public required string Username {get; set;}
-        public List<KomentarzOferty>? listaKomentarzy {get; set;}
     }
 }
