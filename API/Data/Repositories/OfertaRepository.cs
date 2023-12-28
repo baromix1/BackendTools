@@ -26,6 +26,8 @@ namespace API.Data.Repositories
             var o = await _context.oferty.SingleOrDefaultAsync(p => p.Id == id);
             string name = _context.uzytkownicy.Find(o.IdUzytkownika).username;
 #pragma warning restore CS8603 // Possible null reference return.
+            List<KomentarzOferty> listaKomentarzy = new List<KomentarzOferty>();
+            listaKomentarzy = (List<KomentarzOferty>)GetKomentarzeOfertyAsync(o.Id);
             OfertaDto temp = new OfertaDto
             {
                 Id = o.Id,
@@ -40,7 +42,8 @@ namespace API.Data.Repositories
                 Tytul = o.Tytul,
                 Opis = o.Opis,
                 CzyZakonczona = o.CzyZakonczona,
-                Username = name
+                Username = name,
+                listaKomentarzy = listaKomentarzy
             };
             return temp;
 
@@ -48,12 +51,14 @@ namespace API.Data.Repositories
 
         public async Task<IReadOnlyList<OfertaDto>> GetOfertyAsync(int idWspolnoty, ISpecification<Oferta> spec)
         {
-            var oferty = await ApplySpecification(spec).Where(p => p.IdOsiedla == idWspolnoty).ToListAsync();
+            var oferty = await ApplySpecification(spec).Where(p => p.IdOsiedla == idWspolnoty&&p.CzyZakonczona==false).ToListAsync();
 
             List<OfertaDto> lista = new List<OfertaDto>();
 
             foreach (var o in oferty)
             {
+                List<KomentarzOferty> listaKomentarzy = new List<KomentarzOferty>();
+                listaKomentarzy = (List<KomentarzOferty>)GetKomentarzeOfertyAsync(o.Id);
                 string name = _context.uzytkownicy.Find(o.IdUzytkownika).username;
                 OfertaDto temp = new OfertaDto
                 {
@@ -69,7 +74,8 @@ namespace API.Data.Repositories
                     Tytul = o.Tytul,
                     Opis = o.Opis,
                     CzyZakonczona = o.CzyZakonczona,
-                    Username = name
+                    Username = name,
+                    listaKomentarzy = listaKomentarzy
                 };
                 lista.Add(temp);
 
@@ -80,16 +86,54 @@ namespace API.Data.Repositories
         {
             return await _context.oferty.Where(p => p.IdOsiedla == idWspolnoty && p.IdUzytkownika == idUzytkownika).ToListAsync();
         }
-      
-      
-        
-        private IQueryable<Oferta> ApplySpecification(ISpecification<Oferta> spec){
-            return SpecificationEvalator<Oferta>.GetQuery(_context.oferty.AsQueryable(),spec);
+
+
+
+        private IQueryable<Oferta> ApplySpecification(ISpecification<Oferta> spec)
+        {
+            return SpecificationEvalator<Oferta>.GetQuery(_context.oferty.AsQueryable(), spec);
         }
 
         public async Task<int> CountAsync(ISpecification<Oferta> spec)
         {
             return await ApplySpecification(spec).CountAsync();
+        }
+        public IReadOnlyList<KomentarzOferty> GetKomentarzeOfertyAsync(int idOferty)
+        {
+            return _context.komentarzeOferty.Where(p => p.IdOferty == idOferty).ToList();
+        }
+        public async Task<int> AddKomentarzToOferta(KomentarzOfertyDto komentarzOfertyDto)
+        {
+            KomentarzOferty nowyKomentarz = new KomentarzOferty
+            {
+                IdOferty = komentarzOfertyDto.IdOferty,
+                IdUzytkownika = komentarzOfertyDto.IdUzytkownika,
+                Tresc = komentarzOfertyDto.Tresc,
+                Data = komentarzOfertyDto.Data
+            };
+            await _context.komentarzeOferty.AddAsync(nowyKomentarz);
+
+            return await _context.SaveChangesAsync();
+        }
+        public async Task<int> AddOferta(AddOfertaDto oferta)
+        {
+            Oferta nowaOferta = new Oferta
+            {
+                
+                IdOsiedla = oferta.IdOsiedla,
+                IdUzytkownika = oferta.IdOsiedla,
+                Typ = oferta.Typ,
+                Cena = oferta.Cena,
+                Zdjecie = oferta.Zdjecie,
+                DataDodaniaOferty = oferta.DataDodaniaOferty,
+                DataDoKiedy = oferta.DataDoKiedy,
+                DataOdKiedy = oferta.DataOdKiedy,
+                Tytul = oferta.Tytul,
+                Opis = oferta.Opis,
+                CzyZakonczona = oferta.CzyZakonczona,
+            };
+            await _context.oferty.AddAsync(nowaOferta);
+            return await _context.SaveChangesAsync();
         }
     }
 }

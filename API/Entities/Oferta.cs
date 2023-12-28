@@ -9,8 +9,8 @@ namespace API.Entities
         public string? Opis { get; set; }
         public required int IdOsiedla { get; set; }
         public required DateTime DataDodaniaOferty { get; set; }
-        public DateTime? DataOdKiedy { get; set; }
-        public DateTime? DataDoKiedy { get; set; }
+        public Nullable<DateTime> DataOdKiedy { get; set; }
+        public Nullable<DateTime> DataDoKiedy { get; set; }
         public float? Cena { get; set; }
         public required bool CzyZakonczona { get; set; }
     }
