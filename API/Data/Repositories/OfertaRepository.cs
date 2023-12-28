@@ -51,7 +51,7 @@ namespace API.Data.Repositories
 
         public async Task<IReadOnlyList<OfertaDto>> GetOfertyAsync(int idWspolnoty, ISpecification<Oferta> spec)
         {
-            var oferty = await ApplySpecification(spec).Where(p => p.IdOsiedla == idWspolnoty&&p.CzyZakonczona==false).ToListAsync();
+            var oferty = await ApplySpecification(spec).Where(p => p.IdOsiedla == idWspolnoty && p.CzyZakonczona == false).ToListAsync();
 
             List<OfertaDto> lista = new List<OfertaDto>();
 
@@ -119,7 +119,6 @@ namespace API.Data.Repositories
         {
             Oferta nowaOferta = new Oferta
             {
-                
                 IdOsiedla = oferta.IdOsiedla,
                 IdUzytkownika = oferta.IdOsiedla,
                 Typ = oferta.Typ,
