@@ -7,6 +7,7 @@ using API.Data.Repositories;
 using API.DTOs;
 using API.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -20,7 +21,6 @@ namespace API.Controllers
         {
             _uzytkownicy = uzytkownicy;
             _context = context;
-
         }
 
         [HttpPost("users")]
@@ -51,9 +51,9 @@ namespace API.Controllers
 
         [HttpPost("register")]
 
-        public async Task<bool> Register(RegisterDto registerDto)
+        public async Task<ActionResult> Register(RegisterDto registerDto)
         {
-            if (await _uzytkownicy.UserExists(registerDto.username)) return false;
+            if (await _uzytkownicy.UserExists(registerDto.username)) return BadRequest("Taki uzytkownik juz istnieje");
 
             var user = new Uzytkownik
             {
@@ -79,7 +79,29 @@ namespace API.Controllers
             _context.uzytkownicyWspolnotyAsocjace.Add(temp);
             await _context.SaveChangesAsync();
 
-            return true;
+            return Ok();
+        }
+
+        [HttpDelete("usun-uzytkownika/{id}")]
+
+        public async Task<ActionResult> DeleteUser(int id)
+        {
+            var user = await _context.uzytkownicy.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (user == null) return BadRequest("Taki uzytkownik nie istnieje");
+
+            _context.uzytkownicy.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut("dodaj-uzytkownika-do-wspolnoty")]
+        public async Task<ActionResult> AddUserToWspolnotaDb(WspolnotaUzytkownikDto wspolnotaUzytkownik)
+        {
+            if (await _uzytkownicy.AddUserToWspolnotaDbAsyn(wspolnotaUzytkownik.idUzytkownika, wspolnotaUzytkownik.idWspolnoty)) return Ok();
+
+            return BadRequest("Taki uzytkownik nie istnieje");
         }
     }
 }
