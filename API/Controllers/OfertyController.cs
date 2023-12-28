@@ -27,7 +27,7 @@ namespace API.Controllers
             var countSpec=new ProductWithFiltersForCountSpecification(ofertyParams);
             var totalItems=await _oferty.CountAsync(countSpec);
             var oferty=await _oferty.GetOfertyAsync(idWspolnoty,spec);
-            return Ok(new Pagination<OfertaDto>(ofertyParams.PageIndex,ofertyParams.PageSize,totalItems-1,oferty));
+            return Ok(new Pagination<OfertaDto>(ofertyParams.PageIndex,ofertyParams.PageSize,totalItems,oferty));
         }
         [HttpGet("{idOferty}")]
         public async Task<ActionResult<OfertaDto>> GetOferta(int idOferty)
