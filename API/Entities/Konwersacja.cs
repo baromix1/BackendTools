@@ -9,5 +9,6 @@ namespace API.Entities
     {
         public required int idUzytkownik1 { get; set; }
         public required int idUzytkownik2 { get; set; }
+        public required int idWspolnoty { get; set; }
     }
 }
