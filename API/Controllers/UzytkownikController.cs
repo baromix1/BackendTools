@@ -13,13 +13,14 @@ namespace API.Controllers
     public class UzytkownikController : BaseApiController
     {
         private readonly UzytkownikRepository _uzytkownicy;
-         private readonly DataContext _context;
+        private readonly DataContext _context;
 
-        public UzytkownikController(UzytkownikRepository uzytkownicy,DataContext context)
+
+        public UzytkownikController(UzytkownikRepository uzytkownicy, DataContext context)
         {
             _uzytkownicy = uzytkownicy;
             _context = context;
-           
+
         }
 
         [HttpPost("users")]
@@ -61,14 +62,14 @@ namespace API.Controllers
                 typ = registerDto.typ
             };
 
-             _context.uzytkownicy.Add(user);
-            
-             
+            _context.uzytkownicy.Add(user);
+
+
             await _context.SaveChangesAsync();
-            
+
             var uz = await _uzytkownicy.GetUzytkownikByUsernameAsync(registerDto.username);
-            int idUz=uz.idUzytkownika;
-            
+            int idUz = uz.idUzytkownika;
+
             UzytkownikWspolnotaAsocjacja temp = new UzytkownikWspolnotaAsocjacja
             {
                 idUzytkownika = idUz,
@@ -77,7 +78,7 @@ namespace API.Controllers
 
             _context.uzytkownicyWspolnotyAsocjace.Add(temp);
             await _context.SaveChangesAsync();
-            
+
             return true;
         }
     }
