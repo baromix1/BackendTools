@@ -16,7 +16,6 @@ namespace API.Data
 
         public async Task<userDto> GetUzytkownikByUsernameAsync(string username)
         {
-
 #pragma warning disable CS8603 // Possible null reference return.
             var user = await _context.uzytkownicy.SingleOrDefaultAsync(p => p.username == username);
 #pragma warning restore CS8603 // Possible null reference return.
@@ -25,7 +24,6 @@ namespace API.Data
                 idUzytkownika = user.Id,
                 username = user.username
             };
-
         }
                 public async Task<userDto> GetUzytkownikByIddAsync(int idUzytkownika)
         {
@@ -124,6 +122,12 @@ namespace API.Data
             _context.uzytkownicyWspolnotyAsocjace.Add(temp);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<int> GetUserIdByUsernameAsync(string username)
+        {
+            var user = await _context.uzytkownicy.SingleOrDefaultAsync(p => p.username == username);
+            return user?.Id ?? 0;
         }
     }
 }
