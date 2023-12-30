@@ -13,13 +13,13 @@ namespace API.Data.Repositories
             _context = context;
         }
 
-        public async Task<IReadOnlyList<Wiadomosc>> GetKonwersacjaAsync(int idWysylajacego, int idOdbierajacego, int idWspolnoty)
+        public async Task<IReadOnlyList<Wiadomosc>> GetKonwersacjaAsync(int idWysylajacego, int idOdbierajacego, int iddWspolnoty)
         {
             var konwersacja = await _context.konwersacje.SingleOrDefaultAsync(x => (x.idUzytkownik1 == idWysylajacego
             && x.idUzytkownik2 == idOdbierajacego
-            && x.idWspolnoty == idWspolnoty) || (x.idUzytkownik2 == idWysylajacego
+            && x.idWspolnoty == iddWspolnoty) || (x.idUzytkownik2 == idWysylajacego
             && x.idUzytkownik1 == idOdbierajacego
-            && x.idWspolnoty == idWspolnoty));
+            && x.idWspolnoty == iddWspolnoty));
 
             if (konwersacja == null) return null;
 
