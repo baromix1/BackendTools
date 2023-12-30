@@ -37,6 +37,19 @@ namespace API.Controllers
         {
             return Ok(await _oferty.GetOfertyByWspolnotaAndUzytkownikAsync(wspolnotaUzytkownikDto.idWspolnoty, wspolnotaUzytkownikDto.idUzytkownika));
         }
+        [HttpPut("change-oferta-to-pending")]
+        public async Task<ActionResult<IEnumerable<Oferta>>> ChangeToPending(int idOferty)
+        {
+             var i = await _oferty.ChangeToPending(idOferty);
+            if (i > 0)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpPost("add/komentarz")]
         public async Task<ActionResult<IEnumerable<Oferta>>> AddKomentarzToOferta(KomentarzOfertyDto komentarzOfertyDto)

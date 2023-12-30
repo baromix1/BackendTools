@@ -3,6 +3,7 @@ using API.Entities;
 using Core.Specification;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace API.Data.Repositories
 {
@@ -48,12 +49,13 @@ namespace API.Data.Repositories
 
         public async Task<IReadOnlyList<OfertaDto>> GetOfertyAsync(int idWspolnoty, ISpecification<Oferta> spec)
         {
-            var oferty = await ApplySpecification(spec).Where(p => p.IdOsiedla == idWspolnoty && p.CzyZakonczona == false).ToListAsync();
+            var oferty = await ApplySpecification(spec).Where(p => p.CzyZakonczona =="false" && p.IdOsiedla==idWspolnoty).ToListAsync();
 
             List<OfertaDto> lista = new List<OfertaDto>();
 
             foreach (var o in oferty)
             {
+                Console.WriteLine("oferta");
                 List<KomentarzDoWyswietleniaDto> listaKomentarzy = new List<KomentarzDoWyswietleniaDto>();
                 listaKomentarzy = (List<KomentarzDoWyswietleniaDto>)GetKomentarzeOfertyAsync(o.Id);
                 string name = _context.uzytkownicy.Find(o.IdUzytkownika).username;
@@ -152,6 +154,11 @@ namespace API.Data.Repositories
                 await _context.oferty.AddAsync(nowaOferta);
                 return await _context.SaveChangesAsync();
             }
+        }
+        public async Task<int> ChangeToPending(int idOferty){
+            var oferta = _context.oferty.FirstOrDefault(p=>p.Id==idOferty);
+            oferta.CzyZakonczona="pending";
+            return await _context.SaveChangesAsync();
         }
     }
 }
