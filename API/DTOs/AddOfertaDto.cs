@@ -17,6 +17,6 @@ namespace API.DTOs
         public DateTime? DataOdKiedy { get; set; }
         public DateTime? DataDoKiedy { get; set; }
         public float? Cena { get; set; }
-        public required bool CzyZakonczona { get; set; }
+        public required string CzyZakonczona { get; set; }
     }
 }
