@@ -38,6 +38,32 @@ namespace API.Data
             };
 
         }
+        public async Task<IReadOnlyList<Uzytkownik>> GetAllUzytkownicyByAsync(string idwspolnoty)
+        {
+            // var asocjacja = await _context.uzytkownicyWspolnotyAsocjace.Where(p=>p.idWspolnoty!=Int16.Parse(idwspolnoty)).ToListAsync();
+            // List<userDto> users = new List<userDto>();
+            // foreach(var a in asocjacja){
+            //     var username = _context.uzytkownicy.SingleOrDefault(p=>p.Id==a.idUzytkownika);
+            //     var temp = new userDto{
+            //         idUzytkownika=a.idUzytkownika,
+            //         username=username.username
+            //     };
+            //     users.Add(temp);
+            // }
+            // return  users;
+            var users = await _context.uzytkownicy.ToListAsync();
+
+            var associatedUsersIds = await _context.uzytkownicyWspolnotyAsocjace
+                .Where(p => p.idWspolnoty == Int16.Parse(idwspolnoty))
+                .Select(a => a.idUzytkownika)
+                .ToListAsync();
+
+            var freeUsers = users
+                .Where(u => !associatedUsersIds.Contains(u.Id))
+                .ToList();
+            return freeUsers;
+
+        }
 
         public async Task<IReadOnlyList<userDto>> GetUzytkownicyAsync(string idWspolnoty)
         {

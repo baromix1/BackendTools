@@ -28,6 +28,11 @@ namespace API.Controllers
         {
             return Ok(await _uzytkownicy.GetUzytkownicyAsync(idWspolontyDto.idWspolnoty));
         }
+        [HttpPost("all-users-without-id")]
+        public async Task<ActionResult<IEnumerable<Uzytkownik>>> GetUzytkownicyAll(idWspolontyDto idWspolontyDto)
+        {
+            return Ok(await _uzytkownicy.GetAllUzytkownicyByAsync(idWspolontyDto.idWspolnoty));
+        }
 
         [HttpGet("{idUzytkownika}")]
         public async Task<ActionResult<Uzytkownik>> GetUzytkownik(int idUzytkownika)
