@@ -29,11 +29,11 @@ namespace API.Data.Repositories
 
         public async Task<bool> AddToHistoryAsync(int _idUzytkownika, int _idOferty)
         {
-            var zakonczonaOferta = await _context.oferty.FirstOrDefaultAsync(x => x.Id == _idOferty && x.CzyZakonczona == false);
+            var zakonczonaOferta = await _context.oferty.FirstOrDefaultAsync(x => x.Id == _idOferty );
 
             if (zakonczonaOferta == null) return false;
 
-            zakonczonaOferta.CzyZakonczona = true;
+            zakonczonaOferta.CzyZakonczona = "true";
 
             var historia = new HistoriaTransakcji
             {

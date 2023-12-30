@@ -12,6 +12,6 @@ namespace API.Entities
         public Nullable<DateTime> DataOdKiedy { get; set; }
         public Nullable<DateTime> DataDoKiedy { get; set; }
         public float? Cena { get; set; }
-        public required bool CzyZakonczona { get; set; }
+        public required string CzyZakonczona { get; set; }
     }
 }
