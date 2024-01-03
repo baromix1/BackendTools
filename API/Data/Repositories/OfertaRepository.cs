@@ -133,7 +133,7 @@ namespace API.Data.Repositories
         {
             using (var memoryStream = new MemoryStream())
             {
-                oferta.imageFile.CopyTo(memoryStream);
+                oferta.imageFile?.CopyTo(memoryStream);
                 byte[] imageBytes = memoryStream.ToArray();
 
                 Oferta nowaOferta = new Oferta

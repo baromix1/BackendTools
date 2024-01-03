@@ -101,6 +101,22 @@ namespace API.Controllers
             return Ok();
         }
 
+
+        [HttpDelete("usun-uzytkownika-z-wspolnoty/{id}")]
+        public async Task<ActionResult> DeleteUserFromWspolnota(int id)
+        {
+            var polaczenie = await _context.uzytkownicyWspolnotyAsocjace.FirstOrDefaultAsync(x => x.idUzytkownika == id);
+
+            if (polaczenie == null) return BadRequest("Uzytkownik ten nie nalezy do zadnej wspolnoty");
+
+            _context.uzytkownicyWspolnotyAsocjace.Remove(polaczenie);
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+
         [HttpPut("dodaj-uzytkownika-do-wspolnoty")]
         public async Task<ActionResult> AddUserToWspolnotaDb(WspolnotaUzytkownikDto wspolnotaUzytkownik)
         {
