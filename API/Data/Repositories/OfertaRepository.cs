@@ -160,5 +160,10 @@ namespace API.Data.Repositories
             oferta.CzyZakonczona="pending";
             return await _context.SaveChangesAsync();
         }
+         public async Task<int> ChangeToFalse(int idOferty){
+            var oferta = _context.oferty.FirstOrDefault(p=>p.Id==idOferty);
+            oferta.CzyZakonczona="false";
+            return await _context.SaveChangesAsync();
+        }
     }
 }

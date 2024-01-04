@@ -1,18 +1,22 @@
+using API.Data;
 using API.Data.Repositories;
 using API.DTOs;
 using API.Entities;
 using API.Helpers;
 using Core.Specification;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
     public class OfertyController : BaseApiController
     {
         private readonly OfertaRepository _oferty;
+        private readonly DataContext _context;
 
-        public OfertyController(OfertaRepository oferty)
+        public OfertyController(OfertaRepository oferty, DataContext context)
         {
+            _context = context;
             _oferty = oferty;
         }
 
@@ -50,6 +54,19 @@ namespace API.Controllers
                 return BadRequest();
             }
         }
+          [HttpPut("change-oferta-to-false")]
+        public async Task<ActionResult<IEnumerable<Oferta>>> ChangeToFalse(int idOferty)
+        {
+             var i = await _oferty.ChangeToFalse(idOferty);
+            if (i > 0)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpPost("add/komentarz")]
         public async Task<ActionResult<IEnumerable<Oferta>>> AddKomentarzToOferta(KomentarzOfertyDto komentarzOfertyDto)
@@ -78,6 +95,19 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
+        }
+        [HttpDelete("usun-oferte/{id}")]
+
+        public async Task<ActionResult> DeleteOferta(int id)
+        {
+            var oferta = await _context.oferty.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (oferta == null) return BadRequest("Taka oferta nie istnieje");
+
+            _context.oferty.Remove(oferta);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
