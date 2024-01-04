@@ -102,12 +102,12 @@ namespace API.Controllers
         }
 
 
-        [HttpDelete("usun-uzytkownika-z-wspolnoty/{id}")]
-        public async Task<ActionResult> DeleteUserFromWspolnota(int id)
+        [HttpDelete("usun-uzytkownika-z-wspolnoty")]
+        public async Task<ActionResult> DeleteUserFromWspolnota(int idUzytkownika,int idWspolnoty)
         {
-            var polaczenie = await _context.uzytkownicyWspolnotyAsocjace.FirstOrDefaultAsync(x => x.idUzytkownika == id);
+            var polaczenie = await _context.uzytkownicyWspolnotyAsocjace.FirstOrDefaultAsync(x => x.idUzytkownika == idUzytkownika && x.idWspolnoty==idWspolnoty);
 
-            if (polaczenie == null) return BadRequest("Uzytkownik ten nie nalezy do zadnej wspolnoty");
+            if (polaczenie == null) return BadRequest("Uzytkownik ten nie nalezy do tej wspolnoty");
 
             _context.uzytkownicyWspolnotyAsocjace.Remove(polaczenie);
 
