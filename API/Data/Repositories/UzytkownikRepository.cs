@@ -170,6 +170,8 @@ namespace API.Data
         {
             if (!await _context.uzytkownicy.AnyAsync(x => x.Id == _idUzytkownika)) return false;
 
+            if (await _context.uzytkownicyWspolnotyAsocjace.AnyAsync(x => x.idUzytkownika == _idUzytkownika && x.idWspolnoty == _idWspolnoty)) return false;
+
             UzytkownikWspolnotaAsocjacja temp = new UzytkownikWspolnotaAsocjacja
             {
                 idUzytkownika = _idUzytkownika,

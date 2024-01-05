@@ -123,7 +123,7 @@ namespace API.Controllers
         {
             if (await _uzytkownicy.AddUserToWspolnotaDbAsyn(wspolnotaUzytkownik.idUzytkownika, wspolnotaUzytkownik.idWspolnoty)) return Ok();
 
-            return BadRequest("Taki uzytkownik nie istnieje");
+            return BadRequest();
         }
     }
 }
