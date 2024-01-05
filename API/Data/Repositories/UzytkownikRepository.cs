@@ -38,7 +38,7 @@ namespace API.Data
             };
 
         }
-        public async Task<IReadOnlyList<Uzytkownik>> GetAllUzytkownicyByAsync(string idwspolnoty)
+        public async Task<IReadOnlyList<LoggedUserDto>> GetAllUzytkownicyByAsync(string idwspolnoty)
         {
             // var asocjacja = await _context.uzytkownicyWspolnotyAsocjace.Where(p=>p.idWspolnoty!=Int16.Parse(idwspolnoty)).ToListAsync();
             // List<userDto> users = new List<userDto>();
@@ -61,7 +61,35 @@ namespace API.Data
             var freeUsers = users
                 .Where(u => !associatedUsersIds.Contains(u.Id))
                 .ToList();
-            return freeUsers;
+
+            var list = new List<LoggedUserDto>();
+
+            foreach (var f in freeUsers)
+            {
+                var asocjacja = await _context.uzytkownicyWspolnotyAsocjace
+                .Where(p => p.idUzytkownika == f.Id)
+                .ToListAsync();
+
+                var tempList = new List<Wspolnota>();
+
+                foreach (var a in asocjacja)
+                {
+                    var tempp = await _context.wspolnoty.SingleOrDefaultAsync(p => p.Id == a.idWspolnoty);
+                    if (tempp != null)
+                    {
+                        tempList.Add(tempp);
+                    }
+                }
+
+                var temp = new LoggedUserDto
+                {
+                    username = f.username,
+                    typ = f.typ,
+                    listaWspolnot = tempList
+                };
+            }
+
+            return list;
 
         }
 
@@ -95,7 +123,6 @@ namespace API.Data
 
         public async Task<LoggedUserDto> GetUzytkownikByUsernameAndPasswordAsync(string username, string password)
         {
-
 
             var uzytkownik = await _context.uzytkownicy.SingleOrDefaultAsync(p => p.username == username && p.password == password);
 
