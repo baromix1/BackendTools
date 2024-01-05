@@ -83,14 +83,15 @@ namespace API.Data
 
                 var temp = new LoggedUserDto
                 {
+                    id = f.Id,
                     username = f.username,
                     typ = f.typ,
                     listaWspolnot = tempList
                 };
+                list.Add(temp);
             }
 
             return list;
-
         }
 
         public async Task<IReadOnlyList<userDto>> GetUzytkownicyAsync(string idWspolnoty)
