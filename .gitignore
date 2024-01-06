@@ -478,3 +478,4 @@ $RECYCLE.BIN/
 global.json
 API/API.csproj
 
+/global.json
