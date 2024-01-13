@@ -23,6 +23,7 @@ builder.Services.AddDbContext<DataContext>(opt =>
 builder.Services.AddScoped<WspolnotaRepository>();
 builder.Services.AddScoped<UzytkownikRepository>();
 builder.Services.AddScoped<OfertaRepository>();
+builder.Services.AddScoped<PostForumRepository>();
 builder.Services.AddScoped<KonwersacjaRepository>();
 builder.Services.AddScoped<HistoriaTransakcjiRepository>();
 
