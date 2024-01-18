@@ -63,7 +63,7 @@ namespace API.Data.Repositories
                 {
                     Id = o.Id,
                     IdOsiedla = o.IdOsiedla,
-                    IdUzytkownika = o.IdOsiedla,
+                    IdUzytkownika = o.IdUzytkownika,
                     Typ = o.Typ,
                     Cena = o.Cena,
                     Zdjecie = o.Zdjecie,
