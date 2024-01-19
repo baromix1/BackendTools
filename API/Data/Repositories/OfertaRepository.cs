@@ -49,7 +49,7 @@ namespace API.Data.Repositories
 
         public async Task<IReadOnlyList<OfertaDto>> GetOfertyAsync(int idWspolnoty, ISpecification<Oferta> spec)
         {
-            var oferty = await ApplySpecification(spec).Where(p => p.CzyZakonczona =="false" && p.IdOsiedla==idWspolnoty).ToListAsync();
+            var oferty = await ApplySpecification(spec).Where(p => p.CzyZakonczona == "false" && p.IdOsiedla == idWspolnoty).ToListAsync();
 
             List<OfertaDto> lista = new List<OfertaDto>();
 
@@ -85,8 +85,6 @@ namespace API.Data.Repositories
         {
             return await _context.oferty.Where(p => p.IdOsiedla == idWspolnoty && p.IdUzytkownika == idUzytkownika).ToListAsync();
         }
-
-
 
         private IQueryable<Oferta> ApplySpecification(ISpecification<Oferta> spec)
         {
@@ -139,7 +137,7 @@ namespace API.Data.Repositories
                 Oferta nowaOferta = new Oferta
                 {
                     IdOsiedla = oferta.IdOsiedla,
-                    IdUzytkownika = oferta.IdOsiedla,
+                    IdUzytkownika = oferta.IdUzytkownika,
                     Typ = oferta.Typ,
                     Cena = oferta.Cena,
                     Zdjecie = imageBytes,
@@ -155,14 +153,16 @@ namespace API.Data.Repositories
                 return await _context.SaveChangesAsync();
             }
         }
-        public async Task<int> ChangeToPending(int idOferty){
-            var oferta = _context.oferty.FirstOrDefault(p=>p.Id==idOferty);
-            oferta.CzyZakonczona="pending";
+        public async Task<int> ChangeToPending(int idOferty)
+        {
+            var oferta = _context.oferty.FirstOrDefault(p => p.Id == idOferty);
+            oferta.CzyZakonczona = "pending";
             return await _context.SaveChangesAsync();
         }
-         public async Task<int> ChangeToFalse(int idOferty){
-            var oferta = _context.oferty.FirstOrDefault(p=>p.Id==idOferty);
-            oferta.CzyZakonczona="false";
+        public async Task<int> ChangeToFalse(int idOferty)
+        {
+            var oferta = _context.oferty.FirstOrDefault(p => p.Id == idOferty);
+            oferta.CzyZakonczona = "false";
             return await _context.SaveChangesAsync();
         }
     }
