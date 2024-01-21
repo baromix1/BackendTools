@@ -9,6 +9,7 @@ namespace API.DTOs
 {
     public class PostForumDto
     {
+        public int Id { get; set; }
         public required string Username { get; set; }
         public required string Tytul { get; set; }
         public string? Opis { get; set; }
