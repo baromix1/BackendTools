@@ -13,7 +13,7 @@ namespace Core.Specification
         )
         {
             
-            AddOrderBy(x=>x.Typ);
+            AddOrderByDescending(x=>x.DataDodaniaOferty);
             ApplyPaging(ofertyParams.PageSize * (ofertyParams.PageIndex -1),ofertyParams.PageSize);
 
             if(!string.IsNullOrEmpty(ofertyParams.Sort)){
@@ -25,7 +25,7 @@ namespace Core.Specification
                         AddOrderByDescending(p=>p.Cena);
                         break;
                     default:
-                        AddOrderBy(n=>n.Tytul);
+                        AddOrderBy(n=>n.DataDodaniaOferty);
                         break;
                 }
             }
