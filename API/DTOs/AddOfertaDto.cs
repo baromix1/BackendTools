@@ -9,7 +9,7 @@ namespace API.DTOs
     {
         public required string Typ { get; set; }
         public required int IdUzytkownika { get; set; }
-        public IFormFile? imageFile { get; set; }
+        public IFormFile imageFile { get; set; }
         public required string Tytul { get; set; }
         public string? Opis { get; set; }
         public required int IdOsiedla { get; set; }
