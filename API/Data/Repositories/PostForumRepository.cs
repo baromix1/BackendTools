@@ -19,18 +19,19 @@ namespace API.Data.Repositories
         {
 
 #pragma warning disable CS8603 // Possible null reference return.
-            var o = await _context.postyForum.SingleOrDefaultAsync(p => p.Id == id);
-            string name = _context.uzytkownicy.Find(o.IdAutora).username;
+            var p = await _context.postyForum.SingleOrDefaultAsync(p => p.Id == id);
+            string name = _context.uzytkownicy.Find(p.IdAutora).username;
 #pragma warning restore CS8603 // Possible null reference return.
             List<KomentarzDoWyswietleniaDto> listaKomentarzy = new List<KomentarzDoWyswietleniaDto>();
-            listaKomentarzy = (List<KomentarzDoWyswietleniaDto>)GetKomentarzePostaAsync(o.Id);
+            listaKomentarzy = (List<KomentarzDoWyswietleniaDto>)GetKomentarzePostaAsync(p.Id);
             PostForumDto temp = new PostForumDto
             {
-                IdOsiedla = o.IdOsiedla,
+                Id = p.Id,
+                IdOsiedla = p.IdOsiedla,
                 Username = name,
-                DataDodania = o.DataDodania,
-                Tytul = o.Tytul,
-                Opis = o.Opis,
+                DataDodania = p.DataDodania,
+                Tytul = p.Tytul,
+                Opis = p.Opis,
                 listaKomentarzy = listaKomentarzy
             };
             return temp;
@@ -49,6 +50,7 @@ namespace API.Data.Repositories
                 string name = _context.uzytkownicy.Find(p.IdAutora).username;
                 PostForumDto temp = new PostForumDto
                 {
+                    Id = p.Id,
                     IdOsiedla = p.IdOsiedla,
                     Username = name,
                     DataDodania = p.DataDodania,
