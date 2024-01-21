@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Data;
-using API.Data.Repositories;
 using API.DTOs;
 using API.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -49,14 +44,16 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
-
         public async Task<ActionResult<LoggedUserDto>> GetLoggedUser(LoginDto loginDto)
         {
-            return await _uzytkownicy.GetUzytkownikByUsernameAndPasswordAsync(loginDto.Username, loginDto.Password);
+            var user = await _uzytkownicy.GetUzytkownikByUsernameAndPasswordAsync(loginDto.Username, loginDto.Password);
+
+            if (user == null) return Unauthorized("Taki uzytkownik nie istnieje");
+
+            return user;
         }
 
         [HttpPost("register")]
-
         public async Task<ActionResult> Register(RegisterDto registerDto)
         {
             if (await _uzytkownicy.UserExists(registerDto.username)) return BadRequest("Taki uzytkownik juz istnieje");
@@ -85,11 +82,10 @@ namespace API.Controllers
             _context.uzytkownicyWspolnotyAsocjace.Add(temp);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("usun-uzytkownika/{id}")]
-
         public async Task<ActionResult> DeleteUser(int id)
         {
             var user = await _context.uzytkownicy.FirstOrDefaultAsync(x => x.Id == id);
@@ -99,14 +95,13 @@ namespace API.Controllers
             _context.uzytkownicy.Remove(user);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return NoContent();
         }
 
-
         [HttpDelete("usun-uzytkownika-z-wspolnoty")]
-        public async Task<ActionResult> DeleteUserFromWspolnota(int idUzytkownika,int idWspolnoty)
+        public async Task<ActionResult> DeleteUserFromWspolnota(int idUzytkownika, int idWspolnoty)
         {
-            var polaczenie = await _context.uzytkownicyWspolnotyAsocjace.FirstOrDefaultAsync(x => x.idUzytkownika == idUzytkownika && x.idWspolnoty==idWspolnoty);
+            var polaczenie = await _context.uzytkownicyWspolnotyAsocjace.FirstOrDefaultAsync(x => x.idUzytkownika == idUzytkownika && x.idWspolnoty == idWspolnoty);
 
             if (polaczenie == null) return BadRequest("Uzytkownik ten nie nalezy do tej wspolnoty");
 
